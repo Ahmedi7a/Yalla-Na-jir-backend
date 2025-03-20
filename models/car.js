@@ -15,8 +15,8 @@ const carSchema = new mongoose.Schema({
   year: { type: Number, required: true },
   pricePerDay: { type: Number, required: true },
   location: { type: String, required: true },
-  availability: { type: String, enum: ['available', 'rented', 'unavailable'], default: 'unavailable' },
-  approvalStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+  availability: { type: String, enum: ['available', 'rented', 'unavailable'], default: 'available' },
+  // approvalStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
   images: { type: String },
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   reviews: [reviewSchema]
