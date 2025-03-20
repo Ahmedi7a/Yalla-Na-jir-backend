@@ -98,7 +98,9 @@ router.post('/:carId/reviews', async (req, res) => {
   } catch (error) {
       res.status(500).json({ error: error.message });
   }
-});  //delete review
+}); 
+
+//delete review
 router.delete('/:carId/reviews/:reviewId', async (req, res) => {
   try {
       const car = await Car.findById(req.params.carId);
