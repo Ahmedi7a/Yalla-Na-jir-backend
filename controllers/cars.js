@@ -73,6 +73,19 @@ router.put('/:carId', async (req, res) => {
     }
   });
 
+  
+  //delete review
+router.delete('/:carId/reviews/:reviewId', async (req, res) => {
+  try {
+      const car = await Car.findById(req.params.carId);
+      car.reviews.remove({ _id: req.params.reviewId});
+      await car.save();
+      res.status(200).json({ message: 'Ok' });
+  } catch (err) {
+      res.status(500).json(err);
+  }
+});
+
 
 
 module.exports = router;
