@@ -73,6 +73,30 @@ router.put('/:carId', async (req, res) => {
     }
   });
 
+//add review to car
+router.post('/:carId/reviews', async (req, res) => {
+  try {
+      const { rating, comment, userId } = req.body;
+      const carId = req.params.carId;
 
+      const car = await Car.findById(carId);
+      if (!car) {
+          return res.status(404).json({ message: 'Car not found' });
+      }
 
+      const review = {
+          userId: userId,  // Convert userId to ObjectId
+          carId: carId, 
+          rating,
+          comment
+      };
+
+      car.reviews.push(review);
+      await car.save();
+
+      res.status(201).json(car);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;
