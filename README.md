@@ -1,113 +1,45 @@
-# Express API - JWT Auth Back-End - Setup
+# Ahlan Market
 
-## Setup
+## Screenshot/Logo: 
 
-Open your Terminal application and navigate to your projects codespace directory:
 
-## Cloning the Auth boilerplate
 
-This lecture uses the [Express API JWT Auth Template](https://github.com/Dujota/express-api-jwt-auth-template.git) as starter code. The template includes code to authenticate users with JWT tokens.
+## Description: 
+The ***Ahlan Market*** website is a dynamic online marketplace where users can buy and sell both new and used items, as well as offer services. Built with **HTML, CSS, JavaScript, MongoDB, Bootstrap, React and Express.js which is fully MERN stack**. The platform allows users to list products, interact through a comment section for inquiries, and manage their listings with ease. This project highlights the power of full-stack web development and CRUD operations, creating a seamless and interactive shopping experience.
 
-Navigate to the [Express API JWT Auth Template](https://github.com/Dujota/express-api-jwt-auth-template.git) and clone the repository to your machine:
+## Getting started: 
 
-```bash
-git clone https://github.com/Dujota/express-api-jwt-auth-template.git
-```
+#### Trello planning link: https://trello.com/b/uUYcYPrG
+#### Link to my website: https://ahlan-market-react-front-end.vercel.app/
 
-Once we have the repository on our machines, we can change the name of the directory to `'express-api-hoot-back-end'`:
+***How to use:***
 
-```bash
-mv express-api-jwt-auth-template YOUR_APP_NAME
-```
+1. **Browse Listings** – View available items and services posted by other users.  
+2. **Post an Item or Service** – Create a listing by providing details such as title, description, price, and images.  
+3. **Edit or Delete Listings** – Manage your posts by updating details or removing them when no longer available.  
+4. **Ask Questions** – Use the comment section under a listing to inquire about products or services.  
+5. **Connect with Sellers** – Engage with sellers through comments to get more details before making a decision.  
+            
+#### List of the technologies used:
 
-Next, `cd` into your renamed directory:
+##### Front End
+* JavaScript
+* HTML
+* CSS
+* Bootstrap
+* React js
+* Vercel
 
-```bash
-cd YOUR_APP_NAME
-```
+##### Back End
+* Express js
+* Node js
+* MongoDB
+* Heroku
 
-Finally, remove the existing `.git` information from this template:
 
-```bash
-rm -rf .git
-```
-
-> Removing the `.git` info is important as this is just a starter template provided by GA. You do not need the existing git history for this project.
-
-## GitHub setup
-
-To add this project to GitHub, initialize a new Git repository:
-
-```bash
-git init
-git add .
-git commit -m "init commit"
-```
-
-Make a new repository on [GitHub](https://github.com/) named `YOUR_APP_NAME`.
-
-Link your local project to your remote GitHub repo:
-
-```bash
-git remote add origin https://github.com/<github-username>/YOUR_APP_NAME.git
-git push origin main
-```
-
-> 🚨 Do not copy the above command. It will not work. Your GitHub username will replace `<github-username>` (including the `<` and `>`) in the URL above. Also replace `YOUR_APP_NAME` with your project name
-
-Open the project's folder in your code editor:
-
-```bash
-code .
-```
-
-## Install dependencies
-
-Next, you will want to install all of the packages listed in `package.json`
-
-```bash
-npm i
-```
-
-## Create your .gitignore
-
-Run the following command in your terminal:
-
-```bash
-touch .gitignore
-```
-
-Once these files are created, add `.env` and `node_modules` to your `.gitignore` file. Doing so will prevent those files and directories from being tracked and we can be confident that any data we add there will not be pushed up to GitHub.
-
-```text
-.env
-node_modules
-```
-
-## Create your .env
-
-Run the following command in your terminal:
-
-```bash
-touch .env
-```
-
-Lastly, we want to add a `MONGODB_URI` and a `JWT_SECRET`.
-
-Add the following secret keys to your application:
-
-```text
-MONGODB_URI=mongodb+srv://<username>:<password>@sei-w0kys.azure.mongodb.net/hoot?retryWrites=true
-JWT_SECRET=supersecret
-SALT_ROUNDS=10
-```
-
-> If you are unsure of where to obtain your MongoDB URI, please refer to the MongoDB Atlas Setup Lab.
-
-Start the application with the following command:
-
-```bash
-npm run dev
-```
-
-Happy Coding!
+## Next steps: 
+- **Messaging System** – Add direct messaging between buyers and sellers for better communication.  
+- **Payment Integration** – Enable secure online transactions for a seamless buying experience.  
+- **Rating & Reviews** – Allow users to rate sellers and leave feedback on transactions.  
+- **Wishlist & Favorites** – Let users save items they are interested in for later.  
+- **User Upload Image** – Allow user to upload the image using cloudinary of the product rather than the image address.  
