@@ -9,8 +9,8 @@ The ***Yalla Na’ajr*** is a web-based platform that streamlines car rentals by
 
 ## Getting started: 
 
-#### Trello planning link: https://trello.com/b/uUYcYPrG
-#### Link to my website: https://ahlan-market-react-front-end.vercel.app/
+#### Trello planning link: https://trello.com/b/cp7klQHP
+#### Link to my website: 
 
 ***How to use:***
 
