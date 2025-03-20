@@ -54,10 +54,7 @@ router.delete('/:carId', async (req, res) => {
 router.get('/:carId', async (req, res) => {
     try {
 
-const car = await Car.findById(req.params.carId).populate([
-  'user',
-  'reviews.user',
-]);
+const car = await Car.findById(req.params.carId)
       res.status(200).json(car);
     } catch (error) {
       res.status(500).json(error);
