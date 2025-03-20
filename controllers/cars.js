@@ -73,7 +73,7 @@ router.put('/:carId', async (req, res) => {
     }
   });
 
-//add review to car
+  //add review to car
 router.post('/:carId/reviews', async (req, res) => {
   try {
       const { rating, comment, userId } = req.body;
@@ -98,5 +98,18 @@ router.post('/:carId/reviews', async (req, res) => {
   } catch (error) {
       res.status(500).json({ error: error.message });
   }
+});  //delete review
+router.delete('/:carId/reviews/:reviewId', async (req, res) => {
+  try {
+      const car = await Car.findById(req.params.carId);
+      car.reviews.remove({ _id: req.params.reviewId});
+      await car.save();
+      res.status(200).json({ message: 'Ok' });
+  } catch (err) {
+      res.status(500).json(err);
+  }
 });
+
+
+
 module.exports = router;
