@@ -5,7 +5,7 @@
 
 
 ## Description: 
-The ***Ahlan Market*** website is a dynamic online marketplace where users can buy and sell both new and used items, as well as offer services. Built with **HTML, CSS, JavaScript, MongoDB, Bootstrap, React and Express.js which is fully MERN stack**. The platform allows users to list products, interact through a comment section for inquiries, and manage their listings with ease. This project highlights the power of full-stack web development and CRUD operations, creating a seamless and interactive shopping experience.
+The ***Yalla Na’ajr*** is a web-based platform that streamlines car rentals by allowing users to browse, filter, and book vehicles. All registered users start as regular users, while individuals or dealers seeking to list cars must submit a request for admin approval. Approved dealers can manage their listings with full CRUD functionality and track user bookings for their vehicles. Users can view, manage, and cancel their bookings while leaving reviews for cars and dealers. The platform ensures an efficient and user-friendly experience. Built with **HTML, CSS, JavaScript, MongoDB, Bootstrap, React and Express.js which is fully MERN stack**.
 
 ## Getting started: 
 
