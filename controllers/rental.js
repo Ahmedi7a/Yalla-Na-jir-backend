@@ -1,6 +1,6 @@
 const express = require('express');
 const verifyToken = require('../middleware/verify-token.js');
-const Car = require('../models/car.js');
+const Car = require('../models/rental.js');
 const router = express.Router();
 
 // ========== Public Routes ===========
