@@ -15,6 +15,7 @@ const testJWTRouter = require('./controllers/test-jwt');
 const usersRouter = require('./controllers/users');
 const profilesRouter = require('./controllers/profiles');
 const carsRouter = require('./controllers/cars');
+const rentalsRouter = require('./controllers/rentals')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use('/test-jwt', testJWTRouter); // REMOVE FOR TEST ONLY
 app.use('/users', usersRouter);
 app.use('/cars', carsRouter);
+app.use('/rentals', rentalsRouter)
 
 // Protected Routes
 app.use(verifyToken)
