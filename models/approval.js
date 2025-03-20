@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 
 const approvalSchema = new mongoose.Schema({
     carId: { type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true },
