@@ -73,6 +73,43 @@ router.put('/:carId', async (req, res) => {
     }
   });
 
+  //add review to car
+router.post('/:carId/reviews', async (req, res) => {
+  try {
+      const { rating, comment, userId } = req.body;
+      const carId = req.params.carId;
+
+      const car = await Car.findById(carId);
+      if (!car) {
+          return res.status(404).json({ message: 'Car not found' });
+      }
+
+      const review = {
+          userId: userId,  // Convert userId to ObjectId
+          carId: carId, 
+          rating,
+          comment
+      };
+
+      car.reviews.push(review);
+      await car.save();
+
+      res.status(201).json(car);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});  //delete review
+router.delete('/:carId/reviews/:reviewId', async (req, res) => {
+  try {
+      const car = await Car.findById(req.params.carId);
+      car.reviews.remove({ _id: req.params.reviewId});
+      await car.save();
+      res.status(200).json({ message: 'Ok' });
+  } catch (err) {
+      res.status(500).json(err);
+  }
+});
+
 
 
 module.exports = router;
