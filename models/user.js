@@ -13,7 +13,7 @@ const userSchema = new Schema({
     type: String, 
     enum: ['admin', 'dealer', 'user'], 
     default: 'user',
-    required: true },
+    },
 });
 
 userSchema.set('toJSON', {
