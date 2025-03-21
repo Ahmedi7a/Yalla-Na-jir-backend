@@ -2,24 +2,11 @@ const mongoose = require('mongoose');
 
 
 const reviewSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    carId: { type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'  },
+    carId: { type: mongoose.Schema.Types.ObjectId, ref: 'Car' },
     rating: { type: Number, min: 1, max: 5, required: true },
     comment: { type: String },
   }, { timestamps: true });
-
-// const rentalSchema = new mongoose.Schema({
-//     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-//     carId: { type: mongoose.Schema.Types.ObjectId, ref: 'Car', required: true },
-//     startDate: { type: Date, required: true },
-//     endDate: { type: Date, required: true },
-//     totalPrice: { type: Number },
-//     status: {
-//       type: String,
-//       enum: ['pending', 'approved', 'rejected', 'completed'],
-//       default: 'pending',
-//     },
-//   }, { timestamps: true });
 
 const carSchema = new mongoose.Schema({
   dealerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
