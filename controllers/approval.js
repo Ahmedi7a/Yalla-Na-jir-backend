@@ -101,7 +101,7 @@ router.put('/downgrade-dealer/:userId', isAdmin, async (req, res) => {
     user.role = 'user';
     await user.save();
 
-    res.status(200).json({ message: 'User role downgraded to "user".', user });
+    res.status(200).json({ message: 'User role downgraded to user.', user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
