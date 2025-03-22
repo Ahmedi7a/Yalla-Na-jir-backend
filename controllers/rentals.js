@@ -139,4 +139,16 @@ router.delete('/:rentalId', isDealer, async (req, res) => {
     }
 });
 
+//get all rentals (admin only)
+router.get('/all-rentals', isAdmin, async (req, res) => {
+    try {
+        const rentals = await Rentals.find()
+            .populate('carId', 'brand model year location')
+            .populate('userId', 'username');
+        res.json(rentals);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

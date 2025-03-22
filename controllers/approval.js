@@ -107,5 +107,22 @@ router.put('/downgrade-dealer/:userId', isAdmin, async (req, res) => {
   }
 });
 
+router.get('/approved-dealers', isAdmin, async (req, res) => {
+  try {
+    const dealers = await User.find({ role: 'dealer' }, 'username email'); 
+    res.status(200).json(dealers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/all-users', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const users = await User.find({}, 'username email role');
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;
