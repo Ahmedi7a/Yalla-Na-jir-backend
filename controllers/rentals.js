@@ -104,7 +104,7 @@ router.put('/:rentalId/status', isDealer, async (req, res) => {
             return res.status(400).json({ message: 'Invalid rental status.' });
         }
 
-        const rental = await Rentals.findById(req.params.rentalId).populate('carId') .populate('userId');
+        const rental = await Rentals.findById(req.params.rentalId).populate('carId');
         if (!rental || rental.carId.dealerId.toString() !== req.user._id.toString()) {
             return res.status(404).json({ message: 'Rental not found or unauthorized.' });
         }
@@ -112,11 +112,13 @@ router.put('/:rentalId/status', isDealer, async (req, res) => {
         rental.status = status;
         await rental.save();
 
-        if (status === 'completed') {
-            const car = await Car.findById(rental.carId._id);
-            car.availability = 'available';
-            await car.save();
+        const car = await Car.findById(rental.carId._id);
+        if (status === 'approved') {
+            car.availability = 'rented'; 
+        } else if (status === 'completed' || status === 'rejected') {
+            car.availability = 'available'; 
         }
+        await car.save();
 
         res.json({ message: `Rental ${status}.`, rental });
     } catch (err) {
