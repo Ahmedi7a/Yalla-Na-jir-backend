@@ -11,7 +11,7 @@ const router = express.Router();
 // Get all cars (public)
 router.get('/', async (req, res) => {
     try {
-        const cars = await Car.find({}).sort({ createdAt: 'desc' });
+        const cars = await Car.find({}).populate('dealerId', 'username').sort({ createdAt: 'desc' });
         res.status(200).json(cars);
     } catch (error) {
         res.status(500).json(error);
