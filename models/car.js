@@ -10,9 +10,22 @@ const reviewSchema = new mongoose.Schema({
 
 const carSchema = new mongoose.Schema({
   dealerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  brand: { type: String  },
+  brand: {
+    type: String,
+    enum: [
+      'Toyota', 'Honda', 'Ford', 'Chevrolet', 'BMW',
+      'Mercedes-Benz', 'Audi', 'Volkswagen', 'Hyundai', 'Kia',
+      'Nissan', 'Tesla', 'Lexus', 'Mazda', 'Subaru',
+      'Jeep', 'Dodge', 'GMC', 'Porsche', 'Land Rover'
+    ],
+    required: true
+  },
   model: { type: String },
-  year: { type: Number },
+  year: {
+    type: Number,
+    enum: Array.from({ length: new Date().getFullYear() - 1999 }, (_, i) => 2000 + i),
+    required: true
+  },
   pricePerDay: { type: Number },
   location: { type: String },
   availability: { type: String, enum: ['available', 'rented', 'unavailable'], default: 'available' },
