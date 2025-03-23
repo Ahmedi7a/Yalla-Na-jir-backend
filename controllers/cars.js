@@ -3,6 +3,9 @@ const verifyToken = require('../middleware/verify-token.js');
 const isDealer = require('../middleware/is-dealer.js');
 const isAdmin = require('../middleware/is-admin.js');
 const Car = require('../models/car.js');
+const upload = require('../config/multer.js'); // your Cloudinary + multer config
+const { updateCarWithImage } = require('../controllers/cars'); // step 2
+
 
 const router = express.Router();
 
@@ -32,25 +35,77 @@ router.get('/:carId', async (req, res) => {
 router.use(verifyToken);
 
 // Add a car (Dealer only)
-router.post('/', isDealer, async (req, res) => {
+router.post('/', isDealer, upload.single('image'), async (req, res) => {
     try {
-        req.body.dealerId = req.user._id;
-        const car = await Car.create(req.body);
-        res.status(201).json(car);
+      console.log('Uploaded file:', req.file);
+  
+      if (!req.file) {
+        return res.status(400).json({ message: "Image is required." });
+      }
+  
+      const car = await Car.create({
+        dealerId: req.user._id,
+        brand: req.body.brand,
+        model: req.body.model,
+        year: req.body.year,
+        pricePerDay: req.body.pricePerDay,
+        location: req.body.location,
+        image: {
+          url: req.file.path,
+          cloudinary_id: req.file.filename,
+        },
+      });
+  
+      res.status(201).json(car);
     } catch (error) {
-        res.status(500).json(error);
+      console.error('Car creation failed:', error);
+      res.status(500).json({ message: 'Failed to create car', error: error.message });
     }
-});
+  });
+  
+
 
 // Edit car by ID (Dealer only)
-router.put('/:carId', isDealer, async (req, res) => {
-    try {
-        const updatedCar = await Car.findByIdAndUpdate(req.params.carId, req.body, { new: true });
-        res.status(200).json(updatedCar);
-    } catch (error) {
-        res.status(500).json(error);
+router.put('/:carId', isDealer, upload.single('image'), async (req, res) => {
+  try {
+    const car = await Car.findById(req.params.carId);
+    if (!car) return res.status(404).json({ message: 'Car not found' });
+
+    // Authorization check
+    if (req.user.role !== 'admin' && car.dealerId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Unauthorized' });
     }
+
+    // If a new image is uploaded, delete the old one from Cloudinary
+    if (req.file && car.image?.cloudinary_id) {
+      const cloudinary = require('../config/cloudinary');
+      await cloudinary.uploader.destroy(car.image.cloudinary_id);
+    }
+
+    // Prepare updated data
+    const updatedData = {
+      brand: req.body.brand,
+      model: req.body.model,
+      year: req.body.year,
+      pricePerDay: req.body.pricePerDay,
+      location: req.body.location,
+    };
+
+    if (req.file) {
+      updatedData.image = {
+        url: req.file.path,
+        cloudinary_id: req.file.filename,
+      };
+    }
+
+    const updatedCar = await Car.findByIdAndUpdate(req.params.carId, updatedData, { new: true });
+    res.status(200).json(updatedCar);
+  } catch (error) {
+    console.error('Car update failed:', error);
+    res.status(500).json({ message: 'Failed to update car', error: error.message });
+  }
 });
+
 
 // Delete a car (Dealer or Admin)
 router.delete('/:carId', verifyToken, async (req, res) => {
