@@ -69,7 +69,7 @@ router.post('/:carId', async (req, res) => {
 router.get('/my-rentals', async (req, res) => {
     try {
         const rentals = await Rentals.find({ userId: req.user._id })
-            .populate('carId', 'brand model year location');
+            .populate('carId', 'brand model year location image');
         res.json(rentals);
     } catch (err) {
         res.status(500).json({ message: err.message });
