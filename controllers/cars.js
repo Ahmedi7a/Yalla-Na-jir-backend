@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 // Get a car by ID (public)
 router.get('/:carId', async (req, res) => {
     try {
-        const car = await Car.findById(req.params.carId);
+        const car = await Car.findById(req.params.carId).populate('reviews.userId', 'username');
         res.status(200).json(car);
     } catch (error) {
         res.status(500).json(error);
@@ -160,8 +160,8 @@ router.delete('/:carId/reviews/:reviewId', verifyToken, async (req, res) => {
             return res.status(403).json({ error: "Unauthorized: You can only delete your own reviews unless you're an admin." });
         }
 
-        review.remove();
-        await car.save();
+        car.reviews.pull(review._id);
+await car.save();
         res.status(200).json({ message: 'Review deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
