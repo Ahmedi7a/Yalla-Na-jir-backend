@@ -6,19 +6,27 @@ const User = require('../models/user.js');
 
 const router = express.Router();
 
-// All routes are protected by verifyToken
 router.use(verifyToken);
 
 // User requests to become a dealer
 router.post('/request-dealer', async (req, res) => {
   try {
-    // Check if there is already a pending request for this user
-    const existingRequest = await Approval.findOne({ userId: req.user._id, status: 'pending' });
+    // Check if the user is already a dealer
+    const user = await User.findById(req.user._id);
+    if (user.role === 'dealer') {
+      return res.status(400).json({ error: 'You are already a dealer.' });
+    }
+
+    // Check for an existing pending request
+    const existingRequest = await Approval.findOne({ 
+      userId: req.user._id, 
+      status: 'pending' 
+    });
     if (existingRequest) {
-      return res.status(400).json({ error: 'Your request to become a dealer is already pending.' });
+      return res.status(400).json({ error: 'Your request is already pending.' });
     }
     
-    // Create a new dealer approval request
+    // Create new dealer request
     const approval = await Approval.create({
       userId: req.user._id,
       status: 'pending',
@@ -53,18 +61,23 @@ router.put('/:approvalId/status', isAdmin, async (req, res) => {
       await User.findByIdAndUpdate(approval.userId, { role: 'dealer' });
     }
 
-   //when change to reject return him to user
-
     res.json({ message: `Dealer request ${status}.`, approval });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Admin gets all pending dealer requests
+// Admin gets all pending dealer requests, excluding users who are already dealers
 router.get('/pending-dealer-requests', isAdmin, async (req, res) => {
   try {
-    const approvals = await Approval.find({ status: 'pending' }).populate('userId', 'username');
+    const approvals = await Approval.find({ status: 'pending' })
+      .populate({
+        path: 'userId',
+        select: 'username role',
+        match: { role: { $ne: 'dealer' } } // Exclude users already dealers
+      })
+      .then(results => results.filter(a => a.userId)); // Remove any null populated users
+
     res.json(approvals);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -85,6 +98,7 @@ router.delete('/:approvalId', isAdmin, async (req, res) => {
   }
 });
 
+// Downgrade dealer to regular user
 router.put('/downgrade-dealer/:userId', isAdmin, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -107,15 +121,17 @@ router.put('/downgrade-dealer/:userId', isAdmin, async (req, res) => {
   }
 });
 
+// Get all approved dealers (admin only)
 router.get('/approved-dealers', isAdmin, async (req, res) => {
   try {
-    const dealers = await User.find({ role: 'dealer' }, 'username email'); 
+    const dealers = await User.find({ role: 'dealer' }, 'username email');
     res.status(200).json(dealers);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
+// Get all users (admin only)
 router.get('/all-users', verifyToken, isAdmin, async (req, res) => {
   try {
     const users = await User.find({}, 'username email role');
