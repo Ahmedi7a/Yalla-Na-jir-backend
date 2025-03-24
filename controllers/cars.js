@@ -4,7 +4,6 @@ const isDealer = require('../middleware/is-dealer.js');
 const isAdmin = require('../middleware/is-admin.js');
 const Car = require('../models/car.js');
 const upload = require('../config/multer.js'); // your Cloudinary + multer config
-const { updateCarWithImage } = require('../controllers/cars'); // step 2
 
 
 const router = express.Router();
