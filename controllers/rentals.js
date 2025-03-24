@@ -68,14 +68,13 @@ router.post('/:carId', async (req, res) => {
 // Get user's rentals (User only)
 router.get('/my-rentals', async (req, res) => {
     try {
-      const rentals = await Rentals.find({ userId: req.user._id })
-        .populate('carId', 'brand model year location image') 
-        .populate('userId', 'username'); 
-      res.json(rentals);
+        const rentals = await Rentals.find({ userId: req.user._id })
+            .populate('carId', 'brand model year location');
+        res.json(rentals);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
-  });
+});
 
 // Get rentals for dealer's cars (Dealer only)
 router.get('/dealer-rentals', isDealer, async (req, res) => {
@@ -142,16 +141,22 @@ router.delete('/:rentalId', isDealer, async (req, res) => {
     }
 });
 
-//get all rentals (admin only)
 router.get('/all-rentals', isAdmin, async (req, res) => {
     try {
         const rentals = await Rentals.find()
-            .populate('carId', 'brand model year location')
-            .populate('userId', 'username');
+            .populate({
+                path: 'carId',
+                select: 'brand model dealerId', // Include dealerId
+                populate: {
+                    path: 'dealerId', // Populate dealerId to get dealer's username
+                    select: 'username', // Include dealer's username
+                },
+            })
+            .populate('userId', 'username'); // Include user's username
+
         res.json(rentals);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
-
 module.exports = router;
