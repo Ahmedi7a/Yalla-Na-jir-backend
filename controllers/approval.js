@@ -3,7 +3,8 @@ const verifyToken = require('../middleware/verify-token.js');
 const isAdmin = require('../middleware/is-admin.js');
 const Approval = require('../models/approval.js');
 const User = require('../models/user.js');
-
+const Car = require('../models/car.js');
+const Rental = require('../models/rental.js');
 const router = express.Router();
 
 router.use(verifyToken);
@@ -102,20 +103,34 @@ router.delete('/:approvalId', isAdmin, async (req, res) => {
 router.put('/downgrade-dealer/:userId', isAdmin, async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
-
     if (user.role !== 'dealer') {
       return res.status(400).json({ message: 'User is not a dealer.' });
     }
 
-    // Update the user's role to "user"
+    // Update the user's role
     user.role = 'user';
     await user.save();
 
-    res.status(200).json({ message: 'User role downgraded to user.', user });
+    // Find all cars owned by the dealer
+    const cars = await Car.find({ dealerId: user._id });
+    const carIds = cars.map(car => car._id);
+
+    // Delete all rentals associated with these cars
+    await Rental.deleteMany({ carId: { $in: carIds } });
+
+    // Delete the cars themselves
+    await Car.deleteMany({ dealerId: user._id });
+
+    // Also remove any pending approval requests for this user (just in case)
+    await Approval.deleteMany({ userId: user._id });
+
+    res.status(200).json({
+      message: 'User role downgraded and associated dealer data removed.',
+      user
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
