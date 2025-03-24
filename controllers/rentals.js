@@ -68,13 +68,14 @@ router.post('/:carId', async (req, res) => {
 // Get user's rentals (User only)
 router.get('/my-rentals', async (req, res) => {
     try {
-        const rentals = await Rentals.find({ userId: req.user._id })
-            .populate('carId', 'brand model year location');
-        res.json(rentals);
+      const rentals = await Rentals.find({ userId: req.user._id })
+        .populate('carId', 'brand model year location image') 
+        .populate('userId', 'username'); 
+      res.json(rentals);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+      res.status(500).json({ message: err.message });
     }
-});
+  });
 
 // Get rentals for dealer's cars (Dealer only)
 router.get('/dealer-rentals', isDealer, async (req, res) => {
