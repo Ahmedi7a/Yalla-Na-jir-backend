@@ -65,6 +65,34 @@ router.post('/:carId', async (req, res) => {
     }
 });
 
+// User cancels their own rental
+router.put('/:rentalId/cancel', async (req, res) => {
+    try {
+      const rental = await Rentals.findById(req.params.rentalId).populate('carId');
+  
+      if (!rental || rental.userId.toString() !== req.user._id.toString()) {
+        return res.status(404).json({ message: 'Rental not found or unauthorized.' });
+      }
+  
+      if (!['pending', 'approved'].includes(rental.status)) {
+        return res.status(400).json({ message: 'Only pending or approved rentals can be cancelled.' });
+      }
+  
+      rental.status = 'cancelled';
+      await rental.save();
+  
+      const car = await Car.findById(rental.carId._id);
+      car.availability = 'available';
+      await car.save();
+  
+      res.json({ message: 'Rental cancelled.', rental });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+  
+
+
 // Get user's rentals (User only)
 router.get('/my-rentals', async (req, res) => {
     try {
