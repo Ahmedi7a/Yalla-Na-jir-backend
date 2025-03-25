@@ -10,29 +10,31 @@ const router = express.Router();
 router.use(verifyToken);
 
 // User requests to become a dealer
+// User requests to become a dealer
 router.post('/request-dealer', async (req, res) => {
   try {
-    // Check if the user is already a dealer
+    const { phone, description } = req.body;
+
     const user = await User.findById(req.user._id);
     if (user.role === 'dealer') {
       return res.status(400).json({ error: 'You are already a dealer.' });
     }
 
-    // Check for an existing pending request
-    const existingRequest = await Approval.findOne({ 
-      userId: req.user._id, 
-      status: 'pending' 
+    const existingRequest = await Approval.findOne({
+      userId: req.user._id,
+      status: 'pending',
     });
     if (existingRequest) {
       return res.status(400).json({ error: 'Your request is already pending.' });
     }
-    
-    // Create new dealer request
+
     const approval = await Approval.create({
       userId: req.user._id,
+      phone,
+      description,
       status: 'pending',
     });
-    
+
     res.status(201).json({ message: 'Dealer request submitted.', approval });
   } catch (error) {
     res.status(500).json({ error: error.message });
