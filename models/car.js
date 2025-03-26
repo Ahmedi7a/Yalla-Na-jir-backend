@@ -30,8 +30,8 @@ const carSchema = new mongoose.Schema({
   location: { type: String },
   availability: { type: String, enum: ['available', 'rented', 'unavailable'], default: 'available' },
   image: {
-    url: { type: String, required: true }, // Cloudinary URL
-    cloudinary_id: { type: String, required: true }, // Public ID for deletion
+    url: { type: String, required: true }, 
+    cloudinary_id: { type: String, required: true }, 
   },
   rentals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rental' }],
   reviews: [reviewSchema],

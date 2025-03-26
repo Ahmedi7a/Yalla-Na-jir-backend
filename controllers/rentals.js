@@ -174,13 +174,13 @@ router.get('/all-rentals', isAdmin, async (req, res) => {
         const rentals = await Rentals.find()
             .populate({
                 path: 'carId',
-                select: 'brand model dealerId', // Include dealerId
+                select: 'brand model dealerId', 
                 populate: {
-                    path: 'dealerId', // Populate dealerId to get dealer's username
-                    select: 'username', // Include dealer's username
+                    path: 'dealerId', 
+                    select: 'username', 
                 },
             })
-            .populate('userId', 'username'); // Include user's username
+            .populate('userId', 'username'); 
 
         res.json(rentals);
     } catch (err) {
