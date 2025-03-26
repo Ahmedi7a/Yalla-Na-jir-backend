@@ -1,4 +1,4 @@
-# RentXpress
+# RentXpress (Car Rental Platform)
 
 ## Description: 
 The ***RentXpress*** is a web-based platform that streamlines car rentals by allowing users to browse, filter, and book vehicles. All registered users start as regular users, while individuals or dealers seeking to list cars must submit a request for admin approval. Approved dealers can manage their listings with full CRUD functionality and track user bookings for their vehicles. Users can view, manage, and cancel their bookings while leaving reviews for cars and dealers. The platform ensures an efficient and user-friendly experience. Built with **HTML, CSS, JavaScript, MongoDB, Bootstrap, React and Express.js which is fully MERN stack**.
